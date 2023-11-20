@@ -10,7 +10,8 @@ from datetime import datetime
 
 
 # Database Configuration
-DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres"
+#DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

@@ -1,5 +1,6 @@
 
 #C:\Users\torad\Documents\python311\python.exe -m uvicorn main:app --reload    computador Rafael
+#C:\Users\torad\Documents\python311\python.exe -m uvicorn Customer:app --reload 
 
 from typing import Union
 
