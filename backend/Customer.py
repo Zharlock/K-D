@@ -5,16 +5,34 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel
 from datetime import datetime
+from typing import Optional
 
 
 
 
 # Database Configuration
-DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"
+
+#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+#DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
+DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
+
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 Base = declarative_base()
+
+# Create tables
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI()
+
+# Dependency to get the database session
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 # Pydantic Model for Customer
 class CustomerCreate(BaseModel):
@@ -81,18 +99,6 @@ class Customer(Base):
     created_at = Column(DateTime)
     is_pet_owner = Column(Boolean)
 
-# Create tables
-Base.metadata.create_all(bind=engine)
-
-app = FastAPI()
-
-# Dependency to get the database session
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # CRUD Operations
 @app.post("/customers/", response_model=ResponseModel)
