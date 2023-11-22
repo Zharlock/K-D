@@ -1,6 +1,15 @@
 
-from Customer import *
+from Customer import * #(create_customer, read_customer, update_customer, delete_customer, CustomerResponse, CustomerCreate, CustomerUpdate, ResponseModel,get_db)
 from Customer import CustomerResponse 
+from Customer_type import *
+from Pet import *
+from Pagamento import *
+from Agenda import *
+from Ofertas import *
+from Funcionario import *
+from Enclosure import *
+from Checkin import *
+from Checkout import *
 from typing import Union
 from fastapi import FastAPI
 from fastapi import FastAPI, HTTPException, Depends, Response
@@ -13,17 +22,6 @@ from datetime import datetime
 from typing import Optional
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
-from Customer import (
-    create_customer,
-    read_customer,
-    update_customer,
-    delete_customer,
-    CustomerResponse,
-    CustomerCreate,
-    CustomerUpdate,
-    ResponseModel,
-    get_db,
-)
 
 #****************************************************************************************************
 #C:\Users\torad\Documents\python311\python.exe -m uvicorn main:app --reload    computador Rafael
