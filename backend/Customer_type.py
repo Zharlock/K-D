@@ -9,9 +9,9 @@ from typing import Optional
 
 # Database Configuration
 
-#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
 #DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
-DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
 #DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
 
 engine = create_engine(DATABASE_URL)
@@ -57,7 +57,7 @@ def create_customer_type(customer_type: CustomerTypeCreate, db: Session = Depend
     db.add(db_customer_type)
     db.commit()
     db.refresh(db_customer_type)
-    return db_customer_type
+    return {"status": "success", "message": "Customer_type created successfully"}
 
 @app.get("/customer-types/{customer_type_id}", response_model=CustomerTypeResponse)
 def read_customer_type(customer_type_id: int, db: Session = Depends(get_db)):
@@ -81,7 +81,7 @@ def update_customer_type(
         db_customer_type.type = customer_type_update.type
         db.commit()
         db.refresh(db_customer_type)
-        return db_customer_type
+        return {"status": "success", "message": "Customer_type updated successfully"}
     raise HTTPException(status_code=404, detail="Customer type not found")
 
 @app.delete("/customer-types/{customer_type_id}", response_model=ResponseModel)

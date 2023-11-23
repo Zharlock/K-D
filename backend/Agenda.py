@@ -9,9 +9,9 @@ from typing import Optional
 
 # Database Configuration
 
-#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
 #DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
-DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
 #DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
 
 engine = create_engine(DATABASE_URL)
@@ -83,7 +83,7 @@ def create_agenda(agenda: AgendaCreate, db: Session = Depends(get_db)):
     db.add(db_agenda)
     db.commit()
     db.refresh(db_agenda)
-    return db_agenda
+    return {"status": "success", "message": "Agenda created successfully"}
 
 @app.get("/agendas/{agenda_id}", response_model=AgendaResponse)
 def read_agenda(agenda_id: int, db: Session = Depends(get_db)):
@@ -105,7 +105,7 @@ def update_agenda(
 
         db.commit()
         db.refresh(db_agenda)
-        return db_agenda
+        return {"status": "success", "message": "Agenda updated successfully"}
     raise HTTPException(status_code=404, detail="Agenda not found")
 
 @app.delete("/agendas/{agenda_id}", response_model=ResponseModel)

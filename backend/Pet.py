@@ -9,9 +9,9 @@ from typing import Optional
 
 # Database Configuration
 
-#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
 #DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
-DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
 #DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
 
 engine = create_engine(DATABASE_URL)
@@ -83,7 +83,7 @@ def create_pet(pet: PetCreate, db: Session = Depends(get_db)):
     db.add(db_pet)
     db.commit()
     db.refresh(db_pet)
-    return db_pet
+    return {"status": "success", "message": "Pet created successfully"}
 
 @app.get("/pets/{pet_id}", response_model=PetResponse)
 def read_pet(pet_id: int, db: Session = Depends(get_db)):
@@ -105,7 +105,7 @@ def update_pet(
 
         db.commit()
         db.refresh(db_pet)
-        return db_pet
+        return {"status": "success", "message": "Pet updated successfully"}
     raise HTTPException(status_code=404, detail="Pet not found")
 
 @app.delete("/pets/{pet_id}", response_model=ResponseModel)

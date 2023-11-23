@@ -9,9 +9,9 @@ from typing import Optional
 
 # Database Configuration
 
-#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
 #DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
-DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
 #DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
 
 engine = create_engine(DATABASE_URL)
@@ -69,7 +69,7 @@ def create_ofertas(ofertas: OfertasCreate, db: Session = Depends(get_db)):
     db.add(db_ofertas)
     db.commit()
     db.refresh(db_ofertas)
-    return db_ofertas
+    return {"status": "success", "message": "Ofertas created successfully"}
 
 @app.get("/ofertas/{ofertas_id}", response_model=OfertasResponse)
 def read_ofertas(ofertas_id: int, db: Session = Depends(get_db)):
@@ -91,7 +91,7 @@ def update_ofertas(
 
         db.commit()
         db.refresh(db_ofertas)
-        return db_ofertas
+        return {"status": "success", "message": "Ofetas updated successfully"}
     raise HTTPException(status_code=404, detail="Ofertas not found")
 
 @app.delete("/ofertas/{ofertas_id}", response_model=ResponseModel)

@@ -9,9 +9,9 @@ from typing import Optional
 
 # Database Configuration
 
-#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
 #DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
-DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
 #DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
 
 engine = create_engine(DATABASE_URL)
@@ -67,7 +67,7 @@ def create_enclosure(enclosure: EnclosureCreate, db: Session = Depends(get_db)):
     db.add(db_enclosure)
     db.commit()
     db.refresh(db_enclosure)
-    return db_enclosure
+    return {"status": "success", "message": "Enclosure created successfully"}
 
 @app.get("/enclosures/{enclosure_id}", response_model=EnclosureResponse)
 def read_enclosure(enclosure_id: int, db: Session = Depends(get_db)):
@@ -89,7 +89,7 @@ def update_enclosure(
 
         db.commit()
         db.refresh(db_enclosure)
-        return db_enclosure
+        return {"status": "success", "message": "Enclosure updated successfully"}
     raise HTTPException(status_code=404, detail="Enclosure not found")
 
 @app.delete("/enclosures/{enclosure_id}", response_model=ResponseModel)

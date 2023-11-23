@@ -9,9 +9,9 @@ from typing import Optional
 
 # Database Configuration
 
-#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
 #DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
-DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
 #DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
 
 engine = create_engine(DATABASE_URL)
@@ -68,7 +68,7 @@ def create_checkin(checkin: CheckinCreate, db: Session = Depends(get_db)):
     db.add(db_checkin)
     db.commit()
     db.refresh(db_checkin)
-    return db_checkin
+    return {"status": "success", "message": "Checkin created successfully"}
 
 @app.get("/checkins/{checkin_id}", response_model=CheckinResponse)
 def read_checkin(checkin_id: int, db: Session = Depends(get_db)):
@@ -90,7 +90,7 @@ def update_checkin(
 
         db.commit()
         db.refresh(db_checkin)
-        return db_checkin
+        return {"status": "success", "message": "Checkin updated successfully"}
     raise HTTPException(status_code=404, detail="Checkin not found")
 
 @app.delete("/checkins/{checkin_id}", response_model=ResponseModel)

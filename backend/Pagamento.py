@@ -9,9 +9,9 @@ from typing import Optional
 
 # Database Configuration
 
-#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
 #DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
-DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
 #DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
 
 engine = create_engine(DATABASE_URL)
@@ -65,7 +65,7 @@ def create_pagamento(pagamento: PagamentoCreate, db: Session = Depends(get_db)):
     db.add(db_pagamento)
     db.commit()
     db.refresh(db_pagamento)
-    return db_pagamento
+    return {"status": "success", "message": "Pagamento created successfully"}
 
 @app.get("/pagamentos/{pagamento_id}", response_model=PagamentoResponse)
 def read_pagamento(pagamento_id: int, db: Session = Depends(get_db)):
@@ -87,7 +87,7 @@ def update_pagamento(
 
         db.commit()
         db.refresh(db_pagamento)
-        return db_pagamento
+        return {"status": "success", "message": "Pagamento updated successfully"}
     raise HTTPException(status_code=404, detail="Pagamento not found")
 
 @app.delete("/pagamentos/{pagamento_id}", response_model=ResponseModel)

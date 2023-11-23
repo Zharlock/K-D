@@ -9,9 +9,9 @@ from typing import Optional
 
 # Database Configuration
 
-#DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
+DATABASE_URL = "postgresql://postgres:lola9123@localhost/postgres" #Rafael
 #DATABASE_URL = "postgresql://postgres:123456@localhost/postgres"  #Bagulho
-DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
+#DATABASE_URL = "postgresql://postgres:1234@localhost/postgres" #Carlos
 #DATABASE_URL = "postgresql://postgres:123@localhost/postgres" #Rodrigo
 
 engine = create_engine(DATABASE_URL)
@@ -67,7 +67,7 @@ def create_funcionario(funcionario: FuncionarioCreate, db: Session = Depends(get
     db.add(db_funcionario)
     db.commit()
     db.refresh(db_funcionario)
-    return db_funcionario
+    return {"status": "success", "message": "Funcionario created successfully"}
 
 @app.get("/funcionarios/{funcionario_id}", response_model=FuncionarioResponse)
 def read_funcionario(funcionario_id: int, db: Session = Depends(get_db)):
@@ -89,7 +89,7 @@ def update_funcionario(
 
         db.commit()
         db.refresh(db_funcionario)
-        return db_funcionario
+        return {"status": "success", "message": "Funcionario updated successfully"}
     raise HTTPException(status_code=404, detail="Funcionario not found")
 
 @app.delete("/funcionarios/{funcionario_id}", response_model=ResponseModel)
