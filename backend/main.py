@@ -1,6 +1,7 @@
 
 from Customer import * #(create_customer, read_customer, update_customer, delete_customer, CustomerResponse, CustomerCreate, CustomerUpdate, ResponseModel,get_db)
 from Customer import CustomerResponse 
+from Image import *
 from Customer_type import *
 from Pet import *
 from Pagamento import *
@@ -245,3 +246,22 @@ def update_pet_route(
 @app.delete("/pets/{pet_id}", response_model=ResponseModel)
 def delete_pet_route(pet_id: int, db: Session = Depends(get_db)):
     return delete_pet(pet_id, db)
+
+#********************************************************************************************
+
+# CRUD Operations for Image
+@app.post("/images/", response_model=ImageResponse)
+def create_image(image: ImageCreate, db: Session = Depends(get_db)):
+    return create_image(image, db)
+
+@app.get("/images/{image_id}", response_model=ImageResponse)
+def read_image(image_id: int, db: Session = Depends(get_db)):
+    return read_image(image_id, db)
+
+@app.put("/images/{image_id}", response_model=ImageResponse)
+def update_image(image_id: int,image_update: ImageUpdate,db: Session = Depends(get_db)):
+    return update_image(image_id, image_update, db)
+
+@app.delete("/images/{image_id}", response_model=ResponseModel)
+def delete_image(image_id: int, db: Session = Depends(get_db)):
+    return delete_image(image_id, db)
