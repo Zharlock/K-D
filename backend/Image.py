@@ -1,11 +1,14 @@
+from pickle import BYTEARRAY8
 from fastapi import FastAPI, HTTPException, Depends, Response
 from fastapi.openapi.models import Response, Info, ExternalDocumentation
+from pymysql import Binary
 from sqlalchemy import create_engine, Column, Integer, String, Boolean, DateTime 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
+from sqlalchemy import LargeBinary
 
 # Database Configuration
 
@@ -56,7 +59,7 @@ class Image(Base):
     __tablename__ = "image"
 
     id_image = Column(Integer, primary_key=True, index=True)
-    image = Column(Binary)  # Assuming you store binary data for the image
+    image = Column(LargeBinary)  # Assuming you store binary data for the image
     image_type = Column(String)
 
 # CRUD Operations for Image
