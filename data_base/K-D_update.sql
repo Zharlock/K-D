@@ -5,7 +5,7 @@ BEGIN;
 
 CREATE TABLE IF NOT EXISTS public."Agenda"
 (
-    id_agenda integer NOT NULL DEFAULT nextval('"Agenda_id_agenda_seq"'::regclass),
+    id_agenda serial,
     id_pet integer,
     id_customer integer NOT NULL,
     data_begin timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public."Agenda"
 
 CREATE TABLE IF NOT EXISTS public."Checkin"
 (
-    id_checkin integer NOT NULL DEFAULT nextval('"Checkin_id_checkin_seq"'::regclass),
+    id_checkin serial,
     id_agenda integer NOT NULL,
     date_created timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     id_enclosure integer NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS public."Checkin"
 
 CREATE TABLE IF NOT EXISTS public."Checkout"
 (
-    id_checkout integer NOT NULL DEFAULT nextval('"Checkout_id_checkout_seq"'::regclass),
+    id_checkout serial,
     id_checkin integer NOT NULL,
     date_created timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     obs text COLLATE pg_catalog."default",
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS public."Checkout"
 
 CREATE TABLE IF NOT EXISTS public."Customer"
 (
-    id_customer integer NOT NULL DEFAULT nextval('"Customer_id_customer_seq"'::regclass),
+    id_customer serial,
     id_type integer NOT NULL,
     nome text COLLATE pg_catalog."default",
     username text COLLATE pg_catalog."default",
@@ -54,14 +54,14 @@ CREATE TABLE IF NOT EXISTS public."Customer"
 
 CREATE TABLE IF NOT EXISTS public."Customer_type"
 (
-    id_type integer NOT NULL DEFAULT nextval('"Customer_type_id_type_seq"'::regclass),
+    id_type serial,
     type text COLLATE pg_catalog."default",
     CONSTRAINT "Customer_type_pkey" PRIMARY KEY (id_type)
 );
 
 CREATE TABLE IF NOT EXISTS public."Enclosure"
 (
-    id_enclosure integer NOT NULL DEFAULT nextval('"Enclosure_id_enclosure_seq"'::regclass),
+    id_enclosure serial,
     type text COLLATE pg_catalog."default",
     ocupado boolean,
     CONSTRAINT "Enclosure_pkey" PRIMARY KEY (id_enclosure)
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS public."Enclosure"
 
 CREATE TABLE IF NOT EXISTS public."Funcionario"
 (
-    id_funcionario integer NOT NULL DEFAULT nextval('"Funcionario_id_funcionario_seq"'::regclass),
+    id_funcionario serial,
     nome text COLLATE pg_catalog."default",
     cargo text COLLATE pg_catalog."default",
     CONSTRAINT "Funcionario_pkey" PRIMARY KEY (id_funcionario)
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS public."Funcionario"
 
 CREATE TABLE IF NOT EXISTS public."Ofertas"
 (
-    id_oferta integer NOT NULL DEFAULT nextval('"Ofertas_id_oferta_seq"'::regclass),
+    id_oferta serial,
     tipo text COLLATE pg_catalog."default",
     valor_dia integer,
     CONSTRAINT "Ofertas_pkey" PRIMARY KEY (id_oferta)
@@ -85,14 +85,14 @@ CREATE TABLE IF NOT EXISTS public."Ofertas"
 
 CREATE TABLE IF NOT EXISTS public."Pagamento"
 (
-    id_pay integer NOT NULL DEFAULT nextval('"Pagamento_id_pay_seq"'::regclass),
+    id_pay serial,
     payment text COLLATE pg_catalog."default",
     CONSTRAINT "Pagamento_pkey" PRIMARY KEY (id_pay)
 );
 
 CREATE TABLE IF NOT EXISTS public."Pet"
 (
-    id_pet integer NOT NULL DEFAULT nextval('"Pet_id_pet_seq"'::regclass),
+    id_pet serial,
     nome text COLLATE pg_catalog."default",
     animal text COLLATE pg_catalog."default",
     race text COLLATE pg_catalog."default",
@@ -105,8 +105,8 @@ CREATE TABLE IF NOT EXISTS public."Pet"
 
 CREATE TABLE IF NOT EXISTS public.image
 (
-    id_image integer NOT NULL DEFAULT nextval('image_id_image_seq'::regclass),
-    image bytea NOT NULL,
+    id_image serial,
+    image text COLLATE pg_catalog."default" NOT NULL,
     image_tye text COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT image_pkey PRIMARY KEY (id_image)
 );

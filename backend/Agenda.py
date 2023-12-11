@@ -77,22 +77,27 @@ class Agenda(Base):
     date_mark = Column(DateTime)
 
 # CRUD Operations for Agenda
-@app.post("/agendas/", response_model=AgendaResponse)
+
 def create_agenda(agenda: AgendaCreate, db: Session = Depends(get_db)):
     db_agenda = Agenda(**agenda.dict())
     db.add(db_agenda)
     db.commit()
     db.refresh(db_agenda)
-    return db_agenda
+    return {"status": "success", "message": "Agenda created successfully"}
 
-@app.get("/agendas/{agenda_id}", response_model=AgendaResponse)
 def read_agenda(agenda_id: int, db: Session = Depends(get_db)):
     db_agenda = db.query(Agenda).filter(Agenda.id_agenda == agenda_id).first()
     if db_agenda:
         return db_agenda
     raise HTTPException(status_code=404, detail="Agenda not found")
 
-@app.put("/agendas/{agenda_id}", response_model=AgendaResponse)
+def read_all_agenda(db: Session = Depends(get_db)):
+    db_agenda = db.query(Agenda).filter().all()
+    if db_agenda:
+        return db_agenda
+    raise HTTPException(status_code=404, detail="Agenda not found")
+
+
 def update_agenda(
     agenda_id: int,
     agenda_update: AgendaUpdate,
@@ -105,10 +110,10 @@ def update_agenda(
 
         db.commit()
         db.refresh(db_agenda)
-        return db_agenda
+        return {"status": "success", "message": "Agenda updated successfully"}
     raise HTTPException(status_code=404, detail="Agenda not found")
 
-@app.delete("/agendas/{agenda_id}", response_model=ResponseModel)
+
 def delete_agenda(agenda_id: int, db: Session = Depends(get_db)):
     db_agenda = db.query(Agenda).filter(Agenda.id_agenda == agenda_id).first()
     if db_agenda:

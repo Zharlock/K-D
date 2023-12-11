@@ -101,7 +101,7 @@ class Customer(Base):
 
 
 # CRUD Operations
-@app.post("/customers/", response_model=ResponseModel)
+
 def create_customer(customer: CustomerCreate, db: Session = Depends(get_db)):
     db_customer = Customer(**customer.dict())
     db.add(db_customer)
@@ -109,8 +109,6 @@ def create_customer(customer: CustomerCreate, db: Session = Depends(get_db)):
     db.refresh(db_customer)
     return {"status": "success", "message": "Customer created successfully"}
 
- 
-@app.get("/customers/{customer_id}", response_model=CustomerResponse)
 def read_customer(customer_id: int, db: Session = Depends(get_db)):
     customer = db.query(Customer).filter(Customer.id_customer == customer_id).first()
     if customer:
@@ -120,7 +118,15 @@ def read_customer(customer_id: int, db: Session = Depends(get_db)):
         return customer_response
     raise HTTPException(status_code=404, detail="Customer not found")
 
-@app.put("/customers/{customer_id}", response_model=ResponseModel)
+def read_all_customer(db: Session = Depends(get_db)):
+    customer = db.query(Customer).filter().all()
+    if customer:
+        # Convert the datetime field to string before returning the response
+        customer_response = CustomerResponse(**customer.__dict__)
+        customer_response.created_at = str(customer.created_at)
+        return customer_response
+    raise HTTPException(status_code=404, detail="Customer not found")
+
 def update_customer(
     customer_id: int,
     customer_update: CustomerUpdate,
@@ -137,9 +143,6 @@ def update_customer(
         return {"status": "success", "message": "Customer updated successfully"}
     raise HTTPException(status_code=404, detail="Customer not found")
 
-
-
-@app.delete("/customers/{customer_id}", response_model=ResponseModel)
 def delete_customer(customer_id: int, db: Session = Depends(get_db)):
     customer = db.query(Customer).filter(Customer.id_customer == customer_id).first()
     if customer:

@@ -59,22 +59,27 @@ class Pagamento(Base):
     payment = Column(String)
 
 # CRUD Operations for Pagamento
-@app.post("/pagamentos/", response_model=PagamentoResponse)
+
 def create_pagamento(pagamento: PagamentoCreate, db: Session = Depends(get_db)):
     db_pagamento = Pagamento(**pagamento.dict())
     db.add(db_pagamento)
     db.commit()
     db.refresh(db_pagamento)
-    return db_pagamento
+    return {"status": "success", "message": "Pagamento created successfully"}
 
-@app.get("/pagamentos/{pagamento_id}", response_model=PagamentoResponse)
+
 def read_pagamento(pagamento_id: int, db: Session = Depends(get_db)):
     db_pagamento = db.query(Pagamento).filter(Pagamento.id_pay == pagamento_id).first()
     if db_pagamento:
         return db_pagamento
     raise HTTPException(status_code=404, detail="Pagamento not found")
 
-@app.put("/pagamentos/{pagamento_id}", response_model=PagamentoResponse)
+def read_all_pagamento(db: Session = Depends(get_db)):
+    db_pagamento = db.query(Pagamento).filter().all()
+    if db_pagamento:
+        return db_pagamento
+    raise HTTPException(status_code=404, detail="Pagamento not found")
+
 def update_pagamento(
     pagamento_id: int,
     pagamento_update: PagamentoUpdate,
@@ -87,10 +92,10 @@ def update_pagamento(
 
         db.commit()
         db.refresh(db_pagamento)
-        return db_pagamento
+        return {"status": "success", "message": "Pagamento updated successfully"}
     raise HTTPException(status_code=404, detail="Pagamento not found")
 
-@app.delete("/pagamentos/{pagamento_id}", response_model=ResponseModel)
+
 def delete_pagamento(pagamento_id: int, db: Session = Depends(get_db)):
     db_pagamento = db.query(Pagamento).filter(Pagamento.id_pay == pagamento_id).first()
     if db_pagamento:

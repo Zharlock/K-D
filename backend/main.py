@@ -1,6 +1,7 @@
 
 from Customer import * #(create_customer, read_customer, update_customer, delete_customer, CustomerResponse, CustomerCreate, CustomerUpdate, ResponseModel,get_db)
 from Customer import CustomerResponse 
+from Image import *
 from Customer_type import *
 from Pet import *
 from Pagamento import *
@@ -22,6 +23,7 @@ from datetime import datetime
 from typing import Optional
 from fastapi import FastAPI, HTTPException, Depends
 from sqlalchemy.orm import Session
+from typing import List
 
 #****************************************************************************************************
 #C:\Users\torad\Documents\python311\python.exe -m uvicorn main:app --reload    computador Rafael
@@ -43,6 +45,10 @@ def create_customer_route(customer: CustomerCreate, db: Session = Depends(get_db
 def read_customer_route(customer_id: int, db: Session = Depends(get_db)):
     return read_customer(customer_id, db)
 
+@app.get("/customers/", response_model=List[CustomerResponse])
+def read_all_customer_route(db: Session = Depends(get_db)):
+    return read_all_customer(db)
+
 @app.put("/customers/{customer_id}", response_model=ResponseModel)
 def update_customer_route(
     customer_id: int, customer_update: CustomerUpdate, db: Session = Depends(get_db)):
@@ -62,6 +68,10 @@ def create_agenda_route(agenda: AgendaCreate, db: Session = Depends(get_db)):
 @app.get("/agendas/{agenda_id}", response_model=AgendaResponse)
 def read_agenda_route(agenda_id: int, db: Session = Depends(get_db)):
     return read_agenda(agenda_id, db)
+
+@app.get("/agendas/", response_model=List[AgendaResponse])
+def read_all_agenda_route(db: Session = Depends(get_db)):
+    return read_all_agenda(db)
 
 @app.put("/agendas/{agenda_id}", response_model=ResponseModel)
 def update_agenda_route(
@@ -83,6 +93,10 @@ def create_checkin_route(checkin: CheckinCreate, db: Session = Depends(get_db)):
 def read_checkin_route(checkin_id: int, db: Session = Depends(get_db)):
     return read_checkin(checkin_id, db)
 
+@app.get("/checkins/", response_model=List[CheckinResponse])
+def read_all_checkin_route(db: Session = Depends(get_db)):
+    return read_all_checkin(db)
+
 @app.put("/checkins/{checkin_id}", response_model=ResponseModel)
 def update_checkin_route(
     checkin_id: int, checkin_update: CheckinUpdate, db: Session = Depends(get_db)):
@@ -102,6 +116,10 @@ def create_checkout_route(checkout: CheckoutCreate, db: Session = Depends(get_db
 @app.get("/checkouts/{checkout_id}", response_model=CheckoutResponse)
 def read_checkout_route(checkout_id: int, db: Session = Depends(get_db)):
     return read_checkout(checkout_id, db)
+
+@app.get("/checkouts/", response_model=List[CheckoutResponse])
+def read_all_checkout_route(db: Session = Depends(get_db)):
+    return read_all_checkout(db)
 
 @app.put("/checkouts/{checkout_id}", response_model=ResponseModel)
 def update_checkout_route(
@@ -127,6 +145,10 @@ def create_customer_type_route(
 def read_customer_type_route(customer_type_id: int, db: Session = Depends(get_db)):
     return read_customer_type(customer_type_id, db)
 
+@app.get("/customer_types/", response_model=List[CustomerTypeResponse])
+def read_all_customer_type_route(db: Session = Depends(get_db)):
+    return read_all_customer_type(db)
+
 @app.put("/customer_types/{customer_type_id}", response_model=ResponseModel)
 def update_customer_type_route(
     customer_type_id: int,
@@ -149,6 +171,10 @@ def create_enclosure_route(enclosure: EnclosureCreate, db: Session = Depends(get
 @app.get("/enclosures/{enclosure_id}", response_model=EnclosureResponse)
 def read_enclosure_route(enclosure_id: int, db: Session = Depends(get_db)):
     return read_enclosure(enclosure_id, db)
+
+@app.get("/enclosures/", response_model=List[EnclosureResponse])
+def read_all_enclosure_route(db: Session = Depends(get_db)):
+    return read_all_enclosure(db)
 
 @app.put("/enclosures/{enclosure_id}", response_model=ResponseModel)
 def update_enclosure_route(
@@ -173,6 +199,10 @@ def create_funcionario_route(
 def read_funcionario_route(funcionario_id: int, db: Session = Depends(get_db)):
     return read_funcionario(funcionario_id, db)
 
+@app.get("/funcionarios/", response_model=List[FuncionarioResponse])
+def read_all_funcionario_route(db: Session = Depends(get_db)):
+    return read_all_funcionario(db)
+
 @app.put("/funcionarios/{funcionario_id}", response_model=ResponseModel)
 def update_funcionario_route(
     funcionario_id: int, funcionario_update: FuncionarioUpdate, db: Session = Depends(get_db)
@@ -193,6 +223,10 @@ def create_ofertas_route(ofertas: OfertasCreate, db: Session = Depends(get_db)):
 @app.get("/ofertas/{ofertas_id}", response_model=OfertasResponse)
 def read_ofertas_route(ofertas_id: int, db: Session = Depends(get_db)):
     return read_ofertas(ofertas_id, db)
+
+@app.get("/ofertas/", response_model=List[OfertasResponse])
+def read_all_ofertas_route(db: Session = Depends(get_db)):
+    return read_all_ofertas(db)
 
 @app.put("/ofertas/{ofertas_id}", response_model=ResponseModel)
 def update_ofertas_route(
@@ -215,6 +249,10 @@ def create_pagamento_route(pagamento: PagamentoCreate, db: Session = Depends(get
 def read_pagamento_route(pagamento_id: int, db: Session = Depends(get_db)):
     return read_pagamento(pagamento_id, db)
 
+@app.get("/pagamentos/", response_model=List[PagamentoResponse])
+def read_all_pagamento_route(db: Session = Depends(get_db)):
+    return read_all_pagamento(db)
+
 @app.put("/pagamentos/{pagamento_id}", response_model=ResponseModel)
 def update_pagamento_route(
     pagamento_id: int, pagamento_update: PagamentoUpdate, db: Session = Depends(get_db)
@@ -236,6 +274,10 @@ def create_pet_route(pet: PetCreate, db: Session = Depends(get_db)):
 def read_pet_route(pet_id: int, db: Session = Depends(get_db)):
     return read_pet(pet_id, db)
 
+@app.get("/pets/", response_model=List[PetResponse])
+def read_all_pet_route(db: Session = Depends(get_db)):
+    return read_all_pet(db)
+
 @app.put("/pets/{pet_id}", response_model=ResponseModel)
 def update_pet_route(
     pet_id: int, pet_update: PetUpdate, db: Session = Depends(get_db)
@@ -245,3 +287,26 @@ def update_pet_route(
 @app.delete("/pets/{pet_id}", response_model=ResponseModel)
 def delete_pet_route(pet_id: int, db: Session = Depends(get_db)):
     return delete_pet(pet_id, db)
+
+#********************************************************************************************
+
+# CRUD Operations for Image
+@app.post("/images/", response_model=ImageResponse)
+def create_image_route(image: ImageCreate, db: Session = Depends(get_db)):
+    return create_image(image, db)
+
+@app.get("/images/{image_id}", response_model=ImageResponse)
+def read_image_route(image_id: int, db: Session = Depends(get_db)):
+    return read_image(image_id, db)
+
+@app.get("/images/", response_model=List[ImageResponse])
+def read_all_image_route(db: Session = Depends(get_db)):
+    return read_all_image(db)
+
+@app.put("/images/{image_id}", response_model=ImageResponse)
+def update_image_route(image_id: int,image_update: ImageUpdate,db: Session = Depends(get_db)):
+    return update_image(image_id, image_update, db)
+
+@app.delete("/images/{image_id}", response_model=ResponseModel)
+def delete_image_route(image_id: int, db: Session = Depends(get_db)):
+    return delete_image(image_id, db)

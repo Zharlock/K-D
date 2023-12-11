@@ -70,22 +70,27 @@ class Checkout(Base):
     id_funcionario = Column(Integer)
 
 # CRUD Operations for Checkout
-@app.post("/checkouts/", response_model=CheckoutResponse)
+
 def create_checkout(checkout: CheckoutCreate, db: Session = Depends(get_db)):
     db_checkout = Checkout(**checkout.dict())
     db.add(db_checkout)
     db.commit()
     db.refresh(db_checkout)
-    return db_checkout
+    return {"status": "success", "message": "Checkout created successfully"}
 
-@app.get("/checkouts/{checkout_id}", response_model=CheckoutResponse)
+
 def read_checkout(checkout_id: int, db: Session = Depends(get_db)):
     db_checkout = db.query(Checkout).filter(Checkout.id_checkout == checkout_id).first()
     if db_checkout:
         return db_checkout
     raise HTTPException(status_code=404, detail="Checkout not found")
 
-@app.put("/checkouts/{checkout_id}", response_model=CheckoutResponse)
+def read_all_checkout(db: Session = Depends(get_db)):
+    db_checkout = db.query(Checkout).filter().all()
+    if db_checkout:
+        return db_checkout
+    raise HTTPException(status_code=404, detail="Checkout not found")
+
 def update_checkout(
     checkout_id: int,
     checkout_update: CheckoutUpdate,
@@ -98,10 +103,10 @@ def update_checkout(
 
         db.commit()
         db.refresh(db_checkout)
-        return db_checkout
+        return {"status": "success", "message": "Cheackout updated successfully"}
     raise HTTPException(status_code=404, detail="Checkout not found")
 
-@app.delete("/checkouts/{checkout_id}", response_model=ResponseModel)
+
 def delete_checkout(checkout_id: int, db: Session = Depends(get_db)):
     db_checkout = db.query(Checkout).filter(Checkout.id_checkout == checkout_id).first()
     if db_checkout:

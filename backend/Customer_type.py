@@ -51,26 +51,34 @@ class CustomerType(Base):
     type = Column(String, index=True, unique=True)
 
 # CRUD Operations for Customer_type
-@app.post("/customer-types/", response_model=CustomerTypeResponse)
+
 def create_customer_type(customer_type: CustomerTypeCreate, db: Session = Depends(get_db)):
     db_customer_type = CustomerType(**customer_type.dict())
     db.add(db_customer_type)
     db.commit()
     db.refresh(db_customer_type)
-    return db_customer_type
+    return {"status": "success", "message": "Customer_type created successfully"}
 
-@app.get("/customer-types/{customer_type_id}", response_model=CustomerTypeResponse)
+
 def read_customer_type(customer_type_id: int, db: Session = Depends(get_db)):
     customer_type = db.query(CustomerType).filter(CustomerType.id_type == customer_type_id).first()
     if customer_type:
         return customer_type
     raise HTTPException(status_code=404, detail="Customer type not found")
+
+
+def read_all_customer_type(db: Session = Depends(get_db)):
+    customer_type = db.query(CustomerType).filter().all()
+    if customer_type:
+        return customer_type
+    raise HTTPException(status_code=404, detail="Customer type not found")
+
 # Pydantic Model for Updating Customer_type
 class CustomerTypeUpdate(BaseModel):
     type: str
 
 # CRUD Operations for Customer_type
-@app.put("/customer-types/{customer_type_id}", response_model=CustomerTypeResponse)
+
 def update_customer_type(
     customer_type_id: int,
     customer_type_update: CustomerTypeUpdate,
@@ -81,10 +89,10 @@ def update_customer_type(
         db_customer_type.type = customer_type_update.type
         db.commit()
         db.refresh(db_customer_type)
-        return db_customer_type
+        return {"status": "success", "message": "Customer_type updated successfully"}
     raise HTTPException(status_code=404, detail="Customer type not found")
 
-@app.delete("/customer-types/{customer_type_id}", response_model=ResponseModel)
+
 def delete_customer_type(customer_type_id: int, db: Session = Depends(get_db)):
     customer_type = db.query(CustomerType).filter(CustomerType.id_type == customer_type_id).first()
     if customer_type:

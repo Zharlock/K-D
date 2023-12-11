@@ -62,22 +62,27 @@ class Checkin(Base):
     id_enclosure = Column(Integer)
 
 # CRUD Operations for Checkin
-@app.post("/checkins/", response_model=CheckinResponse)
+
 def create_checkin(checkin: CheckinCreate, db: Session = Depends(get_db)):
     db_checkin = Checkin(**checkin.dict())
     db.add(db_checkin)
     db.commit()
     db.refresh(db_checkin)
-    return db_checkin
+    return {"status": "success", "message": "Checkin created successfully"}
 
-@app.get("/checkins/{checkin_id}", response_model=CheckinResponse)
+
 def read_checkin(checkin_id: int, db: Session = Depends(get_db)):
     db_checkin = db.query(Checkin).filter(Checkin.id_checkin == checkin_id).first()
     if db_checkin:
         return db_checkin
     raise HTTPException(status_code=404, detail="Checkin not found")
 
-@app.put("/checkins/{checkin_id}", response_model=CheckinResponse)
+def read_all_checkin(db: Session = Depends(get_db)):
+    db_checkin = db.query(Checkin).filter().all()
+    if db_checkin:
+        return db_checkin
+    raise HTTPException(status_code=404, detail="Checkin not found")
+
 def update_checkin(
     checkin_id: int,
     checkin_update: CheckinUpdate,
@@ -90,10 +95,10 @@ def update_checkin(
 
         db.commit()
         db.refresh(db_checkin)
-        return db_checkin
+        return {"status": "success", "message": "Checkin updated successfully"}
     raise HTTPException(status_code=404, detail="Checkin not found")
 
-@app.delete("/checkins/{checkin_id}", response_model=ResponseModel)
+
 def delete_checkin(checkin_id: int, db: Session = Depends(get_db)):
     db_checkin = db.query(Checkin).filter(Checkin.id_checkin == checkin_id).first()
     if db_checkin:

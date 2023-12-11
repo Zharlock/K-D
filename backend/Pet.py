@@ -77,22 +77,28 @@ class Pet(Base):
     id_enclosure = Column(Integer)
 
 # CRUD Operations for Pet
-@app.post("/pets/", response_model=PetResponse)
+
 def create_pet(pet: PetCreate, db: Session = Depends(get_db)):
     db_pet = Pet(**pet.dict())
     db.add(db_pet)
     db.commit()
     db.refresh(db_pet)
-    return db_pet
+    return {"status": "success", "message": "Pet created successfully"}
 
-@app.get("/pets/{pet_id}", response_model=PetResponse)
+
 def read_pet(pet_id: int, db: Session = Depends(get_db)):
     db_pet = db.query(Pet).filter(Pet.id_pet == pet_id).first()
     if db_pet:
         return db_pet
     raise HTTPException(status_code=404, detail="Pet not found")
 
-@app.put("/pets/{pet_id}", response_model=PetResponse)
+
+def read_all_pet(db: Session = Depends(get_db)):
+    db_pet = db.query(Pet).filter().all()
+    if db_pet:
+        return db_pet
+    raise HTTPException(status_code=404, detail="Pet not found")
+
 def update_pet(
     pet_id: int,
     pet_update: PetUpdate,
@@ -105,10 +111,10 @@ def update_pet(
 
         db.commit()
         db.refresh(db_pet)
-        return db_pet
+        return {"status": "success", "message": "Pet updated successfully"}
     raise HTTPException(status_code=404, detail="Pet not found")
 
-@app.delete("/pets/{pet_id}", response_model=ResponseModel)
+
 def delete_pet(pet_id: int, db: Session = Depends(get_db)):
     db_pet = db.query(Pet).filter(Pet.id_pet == pet_id).first()
     if db_pet:
