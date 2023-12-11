@@ -39,6 +39,7 @@ class CustomerCreate(BaseModel):
     id_type: int
     nome: str
     username: str
+    password:str
     email: str
     phone_number: str
     morada: str
@@ -52,6 +53,7 @@ class CustomerUpdate(BaseModel):
     id_type: int
     nome: str
     username: str
+    password:str
     email: str
     phone_number: str
     morada: str
@@ -69,6 +71,7 @@ class CustomerResponse(BaseModel):
     id_type: int
     nome: str
     username: str
+    password:str
     email: str
     phone_number: str
     morada: str
@@ -90,6 +93,7 @@ class Customer(Base):
     id_type = Column(Integer, index=True)
     nome = Column(String, index=True)
     username = Column(String, index=True, unique=True)
+    password = Column(String, index=True)
     email = Column(String, index=True, unique=True)
     phone_number = Column(String, index=True)
     morada = Column(String)
