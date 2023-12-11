@@ -63,7 +63,7 @@ class Ofertas(Base):
     valor_dia = Column(Integer)
 
 # CRUD Operations for Ofertas
-@app.post("/ofertas/", response_model=OfertasResponse)
+
 def create_ofertas(ofertas: OfertasCreate, db: Session = Depends(get_db)):
     db_ofertas = Ofertas(**ofertas.dict())
     db.add(db_ofertas)
@@ -71,14 +71,21 @@ def create_ofertas(ofertas: OfertasCreate, db: Session = Depends(get_db)):
     db.refresh(db_ofertas)
     return {"status": "success", "message": "Ofertas created successfully"}
 
-@app.get("/ofertas/{ofertas_id}", response_model=OfertasResponse)
+
 def read_ofertas(ofertas_id: int, db: Session = Depends(get_db)):
     db_ofertas = db.query(Ofertas).filter(Ofertas.id_oferta == ofertas_id).first()
     if db_ofertas:
         return db_ofertas
     raise HTTPException(status_code=404, detail="Ofertas not found")
 
-@app.put("/ofertas/{ofertas_id}", response_model=OfertasResponse)
+
+def read_all_ofertas(db: Session = Depends(get_db)):
+    db_ofertas = db.query(Ofertas).filter().all()
+    if db_ofertas:
+        return db_ofertas
+    raise HTTPException(status_code=404, detail="Ofertas not found")
+
+
 def update_ofertas(
     ofertas_id: int,
     ofertas_update: OfertasUpdate,
@@ -94,7 +101,7 @@ def update_ofertas(
         return {"status": "success", "message": "Ofetas updated successfully"}
     raise HTTPException(status_code=404, detail="Ofertas not found")
 
-@app.delete("/ofertas/{ofertas_id}", response_model=ResponseModel)
+
 def delete_ofertas(ofertas_id: int, db: Session = Depends(get_db)):
     db_ofertas = db.query(Ofertas).filter(Ofertas.id_oferta == ofertas_id).first()
     if db_ofertas:

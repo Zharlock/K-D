@@ -42,16 +42,17 @@ class ResponseModel(BaseModel):
 
 # Pydantic Model for Image
 class ImageCreate(BaseModel):
-    image: bytes
+    image: str
     image_type: str
 
 class ImageUpdate(BaseModel):
-    image: bytes
+    image: str
     image_type: str
 
 # Pydantic Model for Response
 class ImageResponse(BaseModel):
     id_image: int
+    image: str
     image_type: str
 
 # Database Model for Image
@@ -59,26 +60,32 @@ class Image(Base):
     __tablename__ = "image"
 
     id_image = Column(Integer, primary_key=True, index=True)
-    image = Column(LargeBinary)  # Assuming you store binary data for the image
+    image = Column(String)  # Assuming you store binary data for the image
     image_type = Column(String)
 
 # CRUD Operations for Image
-@app.post("/images/", response_model=ImageResponse)
+
 def create_image(image: ImageCreate, db: Session = Depends(get_db)):
     db_image = Image(**image.dict())
     db.add(db_image)
     db.commit()
     db.refresh(db_image)
-    return {"status": "success", "message": "Image created successfully"}
+    return {"id_image": db_image.id_image, "image": db_image.image, "image_type": db_image.image_type}
 
-@app.get("/images/{image_id}", response_model=ImageResponse)
+
 def read_image(image_id: int, db: Session = Depends(get_db)):
     db_image = db.query(Image).filter(Image.id_image == image_id).first()
     if db_image:
         return db_image
     raise HTTPException(status_code=404, detail="Image not found")
 
-@app.put("/images/{image_id}", response_model=ImageResponse)
+
+def read_all_image(db: Session = Depends(get_db)):
+    db_image = db.query(Image).filter().all()
+    if db_image:
+        return db_image
+    raise HTTPException(status_code=404, detail="Image not found")
+
 def update_image(
     image_id: int,
     image_update: ImageUpdate,
@@ -94,7 +101,7 @@ def update_image(
         return {"status": "success", "message": "Image updated successfully"}
     raise HTTPException(status_code=404, detail="Image not found")
 
-@app.delete("/images/{image_id}", response_model=ResponseModel)
+
 def delete_image(image_id: int, db: Session = Depends(get_db)):
     db_image = db.query(Image).filter(Image.id_image == image_id).first()
     if db_image:

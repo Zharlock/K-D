@@ -61,7 +61,7 @@ class Funcionario(Base):
     cargo = Column(String)
 
 # CRUD Operations for Funcionario
-@app.post("/funcionarios/", response_model=FuncionarioResponse)
+
 def create_funcionario(funcionario: FuncionarioCreate, db: Session = Depends(get_db)):
     db_funcionario = Funcionario(**funcionario.dict())
     db.add(db_funcionario)
@@ -69,14 +69,19 @@ def create_funcionario(funcionario: FuncionarioCreate, db: Session = Depends(get
     db.refresh(db_funcionario)
     return {"status": "success", "message": "Funcionario created successfully"}
 
-@app.get("/funcionarios/{funcionario_id}", response_model=FuncionarioResponse)
+
 def read_funcionario(funcionario_id: int, db: Session = Depends(get_db)):
     db_funcionario = db.query(Funcionario).filter(Funcionario.id_funcionario == funcionario_id).first()
     if db_funcionario:
         return db_funcionario
     raise HTTPException(status_code=404, detail="Funcionario not found")
 
-@app.put("/funcionarios/{funcionario_id}", response_model=FuncionarioResponse)
+def read_all_funcionario(db: Session = Depends(get_db)):
+    db_funcionario = db.query(Funcionario).filter().all()
+    if db_funcionario:
+        return db_funcionario
+    raise HTTPException(status_code=404, detail="Funcionario not found")
+
 def update_funcionario(
     funcionario_id: int,
     funcionario_update: FuncionarioUpdate,
@@ -92,7 +97,7 @@ def update_funcionario(
         return {"status": "success", "message": "Funcionario updated successfully"}
     raise HTTPException(status_code=404, detail="Funcionario not found")
 
-@app.delete("/funcionarios/{funcionario_id}", response_model=ResponseModel)
+
 def delete_funcionario(funcionario_id: int, db: Session = Depends(get_db)):
     db_funcionario = db.query(Funcionario).filter(Funcionario.id_funcionario == funcionario_id).first()
     if db_funcionario:

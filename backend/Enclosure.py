@@ -61,7 +61,7 @@ class Enclosure(Base):
     ocupado = Column(Boolean)
 
 # CRUD Operations for Enclosure
-@app.post("/enclosures/", response_model=EnclosureResponse)
+
 def create_enclosure(enclosure: EnclosureCreate, db: Session = Depends(get_db)):
     db_enclosure = Enclosure(**enclosure.dict())
     db.add(db_enclosure)
@@ -69,14 +69,19 @@ def create_enclosure(enclosure: EnclosureCreate, db: Session = Depends(get_db)):
     db.refresh(db_enclosure)
     return {"status": "success", "message": "Enclosure created successfully"}
 
-@app.get("/enclosures/{enclosure_id}", response_model=EnclosureResponse)
+
 def read_enclosure(enclosure_id: int, db: Session = Depends(get_db)):
     db_enclosure = db.query(Enclosure).filter(Enclosure.id_enclosure == enclosure_id).first()
     if db_enclosure:
         return db_enclosure
     raise HTTPException(status_code=404, detail="Enclosure not found")
 
-@app.put("/enclosures/{enclosure_id}", response_model=EnclosureResponse)
+def read_all_enclosure(db: Session = Depends(get_db)):
+    db_enclosure = db.query(Enclosure).filter().all()
+    if db_enclosure:
+        return db_enclosure
+    raise HTTPException(status_code=404, detail="Enclosure not found")
+
 def update_enclosure(
     enclosure_id: int,
     enclosure_update: EnclosureUpdate,
@@ -92,7 +97,7 @@ def update_enclosure(
         return {"status": "success", "message": "Enclosure updated successfully"}
     raise HTTPException(status_code=404, detail="Enclosure not found")
 
-@app.delete("/enclosures/{enclosure_id}", response_model=ResponseModel)
+
 def delete_enclosure(enclosure_id: int, db: Session = Depends(get_db)):
     db_enclosure = db.query(Enclosure).filter(Enclosure.id_enclosure == enclosure_id).first()
     if db_enclosure:
