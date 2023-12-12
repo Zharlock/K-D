@@ -1,6 +1,6 @@
 # K-D Project
 
-![image](https://github.com/Zharlock/K-D/assets/117875054/2ec30ff6-a005-431c-ba10-02a72ded5ffa) <!-- If you have a logo, replace the link -->
+![Logo](https://github.com/Zharlock/K-D/assets/117875054/eb7cd50b-5836-47f3-9be6-2a50cb4afa95) <!-- If you have a logo, replace the link -->
 
 ## Table of Contents
 - [Introduction](#introduction)
