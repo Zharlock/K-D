@@ -45,6 +45,7 @@ class PetCreate(BaseModel):
     idade: int
     id_customer: int
     id_enclosure: int
+    id_image: str
 
 class PetUpdate(BaseModel):
     nome: str
@@ -53,6 +54,7 @@ class PetUpdate(BaseModel):
     idade: int
     id_customer: int
     id_enclosure: int
+    id_image: str
 
 # Pydantic Model for Response
 class PetResponse(BaseModel):
@@ -63,6 +65,7 @@ class PetResponse(BaseModel):
     idade: int
     id_customer: int
     id_enclosure: int
+    id_image: str
 
 # Database Model for Pet
 class Pet(Base):
@@ -75,6 +78,7 @@ class Pet(Base):
     idade = Column(Integer)
     id_customer = Column(Integer, index=True)
     id_enclosure = Column(Integer)
+    id_image = Column(String)
 
 # CRUD Operations for Pet
 
